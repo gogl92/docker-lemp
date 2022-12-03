@@ -51,7 +51,7 @@ COPY --from=tophfr/mailcatcher /usr/lib/ruby/ /usr/lib/ruby/
 COPY --from=tophfr/mailcatcher /usr/bin/ruby /usr/bin/mailcatcher /usr/bin/
 
 # resource
-COPY php/* /var/www/html/
+COPY ./php/. /var/www/html/
 
 # supervisor config
 COPY \
