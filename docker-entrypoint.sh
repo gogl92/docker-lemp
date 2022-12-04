@@ -87,3 +87,7 @@ if [ "$DISABLE_PGSQL" != "YES" ] && [ ! -f /run/postgresql/.init ]; then
 fi
 
 exec "$@"
+
+cd /var/www/html
+php artisan migrate
+
