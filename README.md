@@ -1,10 +1,11 @@
 ## docker-lemp
 
 [![Docker build](https://github.com/adhocore/docker-lemp/actions/workflows/build.yml/badge.svg)](https://github.com/adhocore/docker-lemp/actions/workflows/build.yml)
-[![Donate 15](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+15)](https://www.paypal.me/ji10/15usd)
-[![Donate 25](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+25)](https://www.paypal.me/ji10/25usd)
-[![Donate 50](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+50)](https://www.paypal.me/ji10/50usd)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Complete+LEMP+fullstack+for+local+development+using+docker&url=https://github.com/adhocore/docker-lemp&hashtags=docker,lemp,fullstack,localdev)
+[![Support](https://img.shields.io/static/v1?label=Support&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/adhocore)
+<!-- [![Donate 15](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+15)](https://www.paypal.me/ji10/15usd)
+[![Donate 25](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+25)](https://www.paypal.me/ji10/25usd)
+[![Donate 50](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+50)](https://www.paypal.me/ji10/50usd) -->
 
 
 > Do not use this LEMP in Production.
@@ -23,28 +24,30 @@ The docker container `adhocore/lemp` is composed of:
 Name          | Version    | Port
 --------------|------------|------
 adminer       | 4.8.1      | 80
-alpine        | 3.15       | -
+alpine        | 3.16       | -
 beanstalkd    | 1.12       | 11300
 elasticsearch | 6.4.3      | 9200,9300
 mailcatcher   | 0.7.1      | 88,25
-memcached     | 1.6.12      | 11211
+memcached     | 1.6.15      | 11211
 MySQL`*`      | 5.7        | 3306
-nginx         | 1.20.2     | 80
-phalcon       | 5.0.3      | -
-PHP8.2`+`     | 8.2.0      | 9000
-PHP8.1`+`     | 8.1.13     | 9000
-PHP8.0`+`     | 8.0.26     | 9000
-PHP7.4`~`     | 7.4.33     | 9000
-PostgreSQL    | 14.5       | 5432
+nginx         | 1.21.1     | 80
+~phalcon~`"`  | 5.0.3      | -
+PHP8.2`+`     | >=8.2.5    | 9000
+PHP8.1`+`     | >=8.1.18   | 9000
+PHP8.0`+`     | >=8.0.28   | 9000
+PHP7.4`~`     | >=7.4.33   | 9000
+PostgreSQL    | 14.7       | 5432
 ~rabbitmq~`^` | 3.8.*      | 5672
-redis         | 6.2.7      | 6379
-swoole        | 4.8.9      | -
+redis         | 7.0.10      | 6379
+~swoole~`"`   | 4.8.9      | -
 
-> `*`: Actually [MariaDB 10.6.9](https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/).
+> `*`: Actually [MariaDB 10.6.12](https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/).
 
 > `+`: Different image tags each viz `:8.2`, `:8.1`, `:8.0` and `:7.4`.
 
 > `~`: PHP 7.4 has reached end of life and is deprecated.
+
+> `"`: swoole, phalcon have been disabled for now in order to optimize and speed up multiplatform builds (amd64/arm64).
 
 ## Usage
 
