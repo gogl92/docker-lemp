@@ -14,10 +14,8 @@
 
 [`adhocore/lemp`](https://hub.docker.com/r/adhocore/lemp) is a minimal single container LEMP full stack for local development.
 
-> If you want to use PHP7.4 on LEMP stack then head over to [`adhocore/lemp:7.4`](7.4.Dockerfile).
-
 It is quick jumpstart for onboarding you into docker based development.
-The download size is just about ~360MB which is tiny considering how much tools and stuffs it contains.
+The download size is just about ~350MB which is tiny considering how much tools and stuffs it contains.
 
 The docker container `adhocore/lemp` is composed of:
 
@@ -28,26 +26,27 @@ alpine        | 3.16       | -
 beanstalkd    | 1.12       | 11300
 elasticsearch | 6.4.3      | 9200,9300
 mailcatcher   | 0.7.1      | 88,25
-memcached     | 1.6.15      | 11211
+memcached     | 1.6.15     | 11211
 MySQL`*`      | 5.7        | 3306
 nginx         | 1.21.1     | 80
 ~phalcon~`"`  | 5.0.3      | -
-PHP8.2`+`     | >=8.2.5    | 9000
-PHP8.1`+`     | >=8.1.18   | 9000
-PHP8.0`+`     | >=8.0.28   | 9000
+PHP8.3`+`     | >=8.3.4    | 9000
+PHP8.2`+`     | >=8.2.17   | 9000
+PHP8.1`+`     | >=8.1.27   | 9000
+PHP8.0`+`     | >=8.0.30   | 9000
 PHP7.4`~`     | >=7.4.33   | 9000
 PostgreSQL    | 14.7       | 5432
 ~rabbitmq~`^` | 3.8.*      | 5672
-redis         | 7.0.10      | 6379
+redis         | 7.0.10     | 6379
 ~swoole~`"`   | 4.8.9      | -
 
 > `*`: Actually [MariaDB 10.6.12](https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/).
 
-> `+`: Different image tags each viz `:8.2`, `:8.1`, `:8.0` and `:7.4`.
+> `+`: Different image tags each, viz `:8.3`, `:8.2`, `:8.1`, `:8.0` and `:7.4`.
 
-> `~`: PHP 7.4 has reached end of life and is deprecated.
+> `~`: PHP 7.4 has reached end of life and is **deprecated**.
 
-> `"`: swoole, phalcon have been disabled for now in order to optimize and speed up multiplatform builds (amd64/arm64).
+> `"`: swoole, phalcon have been disabled for now in order to optimize and speed up multiplatform builds (amd64/arm64) but can be [added back](https://github.com/adhocore/docker-lemp/issues/41#issuecomment-1639873818).
 
 ## Usage
 
@@ -56,6 +55,9 @@ Also recommended to install [docker-compose](https://docs.docker.com/compose/ins
 
 ```sh
 # pull latest image
+docker pull adhocore/lemp:8.3
+
+# or with PHP8.2
 docker pull adhocore/lemp:8.2
 
 # or with PHP8.1
@@ -68,10 +70,10 @@ docker pull adhocore/lemp:8.0
 docker pull adhocore/lemp:7.4
 
 # Go to your project root then run
-docker run -p 8080:80 -p 8888:88 -v `pwd`:/var/www/html --name lemp -d adhocore/lemp:8.2
+docker run -p 8080:80 -p 8888:88 -v `pwd`:/var/www/html --name lemp -d adhocore/lemp:8.3
 
 # In windows, you would use %cd% instead of `pwd`
-docker run -p 8080:80 -p 8888:88 -v %cd%:/var/www/html --name lemp -d adhocore/lemp:8.2
+docker run -p 8080:80 -p 8888:88 -v %cd%:/var/www/html --name lemp -d adhocore/lemp:8.3
 
 # If you want to setup MySQL credentials, pass env vars
 docker run -p 8080:80 -p 8888:88 -v `pwd`:/var/www/html \
@@ -108,7 +110,7 @@ docker start lemp
 
 > **PRO** If you develop multiple apps, you can create multiple lemp containers with different names.
 >
-> eg: `docker run -p 8081:80 -v $(pwd):/var/www/html --name new-lemp -d adhocore/lemp:8.0`
+> eg: `docker run -p 8081:80 -v $(pwd):/var/www/html --name new-lemp -d adhocore/lemp:8.3`
 
 
 ## With Docker compose
@@ -121,7 +123,7 @@ version: '3'
 
 services:
   app:
-    image: adhocore/lemp:8.2
+    image: adhocore/lemp:8.3
     # For different app you can use different names. (eg: )
     container_name: some-app
     volumes:

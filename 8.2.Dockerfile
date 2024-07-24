@@ -11,7 +11,7 @@ RUN \
   # prepare
   echo @legacy https://dl-cdn.alpinelinux.org/alpine/v3.12/community >> /etc/apk/repositories \
   # install
-  && apk add -U --no-cache \
+  && apk add -U --no-cache libssl1.1 \
     beanstalkd \
     elasticsearch@legacy \
     memcached \
@@ -22,6 +22,7 @@ RUN \
     # rabbitmq-server@testing \
     redis \
     supervisor \
+    poppler-utils \
   # elastic setup
   && rm -rf $ES_HOME/plugins \
     && mkdir -p $ES_HOME/tmp $ES_HOME/data $ES_HOME/logs $ES_HOME/plugins $ES_HOME/config/scripts \

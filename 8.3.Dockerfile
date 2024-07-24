@@ -1,4 +1,4 @@
-FROM adhocore/phpfpm:8.1
+FROM adhocore/phpfpm:8.3a
 
 MAINTAINER Jitendra Adhikari <jiten.adhikary@gmail.com>
 
@@ -22,7 +22,6 @@ RUN \
     # rabbitmq-server@testing \
     redis \
     supervisor \
-    poppler-utils \
   # elastic setup
   && rm -rf $ES_HOME/plugins \
     && mkdir -p $ES_HOME/tmp $ES_HOME/data $ES_HOME/logs $ES_HOME/plugins $ES_HOME/config/scripts \
@@ -52,9 +51,7 @@ COPY --from=tophfr/mailcatcher /usr/lib/ruby/ /usr/lib/ruby/
 COPY --from=tophfr/mailcatcher /usr/bin/ruby /usr/bin/mailcatcher /usr/bin/
 
 # resource
-COPY --chown=www-data:www-data ./php/. /var/www/html/
-RUN chmod -R 755 /var/www/html/storage
-
+COPY php/index.php /var/www/html/index.php
 
 # supervisor config
 COPY \
