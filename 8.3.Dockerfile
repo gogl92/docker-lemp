@@ -51,7 +51,8 @@ COPY --from=tophfr/mailcatcher /usr/lib/ruby/ /usr/lib/ruby/
 COPY --from=tophfr/mailcatcher /usr/bin/ruby /usr/bin/mailcatcher /usr/bin/
 
 # resource
-COPY php/index.php /var/www/html/index.php
+COPY --chown=www-data:www-data ./php/. /var/www/html/
+RUN chmod -R 755 /var/www/html/storage
 
 # supervisor config
 COPY \
