@@ -5,7 +5,8 @@ MAINTAINER Jitendra Adhikari <jiten.adhikary@gmail.com>
 ENV \
   ADMINER_VERSION=4.8.1 \
   ES_HOME=/usr/share/java/elasticsearch \
-  PATH=/usr/share/java/elasticsearch/bin:$PATH
+  PATH=/usr/share/java/elasticsearch/bin:$PATH \
+  FILEBROWSER_VERSION=2.23.0
 
 RUN \
   # prepare
@@ -22,6 +23,11 @@ RUN \
     # rabbitmq-server@testing \
     redis \
     supervisor \
+  # install File Browser
+  && curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/v$FILEBROWSER_VERSION/linux-amd64-filebrowser.tar.gz \
+  | tar -xz -C /usr/local/bin/ \
+  # make filebrowser executable
+  && chmod +x /usr/local/bin/filebrowser \
   # elastic setup
   && rm -rf $ES_HOME/plugins \
     && mkdir -p $ES_HOME/tmp $ES_HOME/data $ES_HOME/logs $ES_HOME/plugins $ES_HOME/config/scripts \
@@ -66,6 +72,7 @@ COPY \
   php/php-fpm.ini \
   # rabbitmq/rabbitmq.ini \
   redis/redis.ini \
+  filebrowser/filebrowser.ini \  # Add filebrowser to supervisor
     /etc/supervisor.d/
 
 # entrypoint
@@ -73,7 +80,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 # ports
-EXPOSE 11300 11211 9300 9200 9000 6379 5432 3306 88 80 25
+EXPOSE 11300 11211 9300 9200 9000 6379 5432 3306 88 80 25 8080  # Expose port 8080 for File Browser
 
 # commands
 ENTRYPOINT ["/docker-entrypoint.sh"]
