@@ -72,7 +72,7 @@ COPY \
   php/php-fpm.ini \
   # rabbitmq/rabbitmq.ini \
   redis/redis.ini \
-  filebrowser/filebrowser.ini \  # Add filebrowser to supervisor
+  filebrowser/filebrowser.ini \
     /etc/supervisor.d/
 
 # entrypoint
