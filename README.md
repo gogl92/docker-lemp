@@ -19,26 +19,27 @@ The download size is just about ~350MB which is tiny considering how much tools 
 
 The docker container `adhocore/lemp` is composed of:
 
-Name          | Version    | Port
---------------|------------|------
-adminer       | 4.8.1      | 80
-alpine        | 3.16       | -
-beanstalkd    | 1.12       | 11300
-elasticsearch | 6.4.3      | 9200,9300
-mailcatcher   | 0.7.1      | 88,25
-memcached     | 1.6.15     | 11211
-MySQL`*`      | 5.7        | 3306
-nginx         | 1.21.1     | 80
-~phalcon~`"`  | 5.0.3      | -
-PHP8.3`+`     | >=8.3.4    | 9000
-PHP8.2`+`     | >=8.2.17   | 9000
-PHP8.1`+`     | >=8.1.27   | 9000
-PHP8.0`+`     | >=8.0.30   | 9000
-PHP7.4`~`     | >=7.4.33   | 9000
-PostgreSQL    | 14.7       | 5432
-~rabbitmq~`^` | 3.8.*      | 5672
-redis         | 7.0.10     | 6379
-~swoole~`"`   | 4.8.9      | -
+| Name            | Version    | Port        |
+|-----------------|------------|-------------|
+| adminer         | 4.8.1      | 80          |
+| alpine          | 3.16       | -           |
+| beanstalkd      | 1.12       | 11300       |
+| elasticsearch   | 6.4.3      | 9200, 9300  |
+| mailcatcher     | 0.7.1      | 88, 25      |
+| memcached       | 1.6.15     | 11211       |
+| MySQL`*`        | 5.7        | 3306        |
+| nginx           | 1.21.1     | 80          |
+| ~phalcon~`"`    | 5.0.3      | -           |
+| PHP8.3`+`       | >=8.3.4    | 9000        |
+| PHP8.2`+`       | >=8.2.17   | 9000        |
+| PHP8.1`+`       | >=8.1.27   | 9000        |
+| PHP8.0`+`       | >=8.0.30   | 9000        |
+| PHP7.4`~`       | >=7.4.33   | 9000        |
+| PostgreSQL      | 14.7       | 5432        |
+| ~rabbitmq~`^`   | 3.8.*      | 5672        |
+| redis           | 7.0.10     | 6379        |
+| ~swoole~`"`     | 4.8.9      | -           |
+| filebrowser     | 4.8.1      | 8080        |
 
 > `*`: Actually [MariaDB 10.6.12](https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/).
 
