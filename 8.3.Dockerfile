@@ -23,6 +23,7 @@ RUN \
     # rabbitmq-server@testing \
     redis \
     supervisor \
+    dcron \
   # install File Browser
   && curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/v$FILEBROWSER_VERSION/linux-amd64-filebrowser.tar.gz \
   | tar -xz -C /usr/local/bin/ \

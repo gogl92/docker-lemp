@@ -86,8 +86,14 @@ if [ "$DISABLE_PGSQL" != "YES" ] && [ ! -f /run/postgresql/.init ]; then
   touch /run/postgresql/.init
 fi
 
+# Start cron in the background
+crond -b -l 8
+
+# List Laravel scheduled tasks
+echo "Listing Laravel scheduled tasks:"
+/usr/local/bin/php /var/www/html/artisan schedule:list
+
+# Run the migrations and seeders
+/usr/local/bin/php /var/www/html/artisan migrate:refresh --seed
+
 exec "$@"
-
-cd /var/www/html
-php artisan migrate:refresh --seed
-
