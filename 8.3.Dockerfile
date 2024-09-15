@@ -19,20 +19,26 @@ RUN \
     nano \
     nginx \
     postgresql \
+    # rabbitmq-server@testing \
     redis \
     supervisor \
   # elastic setup
   && rm -rf $ES_HOME/plugins \
     && mkdir -p $ES_HOME/tmp $ES_HOME/data $ES_HOME/logs $ES_HOME/plugins $ES_HOME/config/scripts \
       && mv /etc/elasticsearch/* $ES_HOME/config/ \
+    # elastico user
     && deluser elastico && addgroup -S elastico \
       && adduser -D -S -h /usr/share/java/elasticsearch -s /bin/ash -G elastico elastico \
       && chown elastico:elastico -R $ES_HOME \
       && { sed -ie "s/^-XX:/8-13:-XX:/" /usr/share/java/elasticsearch/config/jvm.options || true; } \
+  # rabbitmq
+  # && apk add -U rabbitmq-server@testing \
+    # && apk add -U rabbitmq-server \
   # adminerevo
   && mkdir -p /var/www/adminerevo \
     && curl -sSLo /var/www/adminerevo/index.php \
       "https://github.com/adminerevo/adminerevo/releases/download/v$ADMINER_VERSION/adminer-$ADMINEREVO_VERSION.php" \
+  # cleanup
   && rm -rf /var/cache/apk/* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/*
 
 # nginx config
@@ -56,6 +62,7 @@ COPY \
   nginx/nginx.ini \
   pgsql/pgsql.ini \
   php/php-fpm.ini \
+  # rabbitmq/rabbitmq.ini \
   redis/redis.ini \
     /etc/supervisor.d/
 
