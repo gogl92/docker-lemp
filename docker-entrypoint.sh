@@ -88,6 +88,3 @@ fi
 
 exec "$@"
 
-cd /var/www/html
-php artisan migrate:refresh --seed
-
