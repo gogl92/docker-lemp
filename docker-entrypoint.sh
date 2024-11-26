@@ -55,10 +55,16 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
 
   cat "$SQL" | mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE
 
-  # Run additional SQL script if provided
-  if [ -f "/docker-entrypoint-initdb.d/init.sql" ]; then
-    echo "Running additional SQL script for MySQL..."
-    mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE < /docker-entrypoint-initdb.d/init.sql
+  # Run additional SQL scripts for MySQL
+  if [ -d "/docker-entrypoint-initdb.d" ]; then
+    for file in /docker-entrypoint-initdb.d/*; do
+      if [ "${file##*.}" = "sql" ]; then
+        echo "Executing MySQL SQL file: $file"
+        mysql --user=root --password="$MYSQL_ROOT_PASSWORD" < "$file"
+      else
+        echo "Skipping non-SQL file for MySQL: $file"
+      fi
+    done
   fi
 
   rm -rf ~/.mysql_history ~/.ash_history $SQL
@@ -86,11 +92,17 @@ if [ "$DISABLE_PGSQL" != "YES" ] && [ ! -f /run/postgresql/.init ]; then
 
   su postgres -c "pg_ctl -D '/usr/local/pgsql/data' -o '-c listen_addresses='' -p ${PGSQL_PORT:-5432}' -w start"
   su -c "psql --username=postgres --file='$SQL'"
-  
-  # Run additional SQL script if provided
-  if [ -f "/docker-entrypoint-initdb.d/init.sql" ]; then
-    echo "Running additional SQL script for PostgreSQL..."
-    su postgres -c "psql --username=postgres --file='/docker-entrypoint-initdb.d/init.sql'"
+
+  # Run additional SQL scripts for PostgreSQL
+  if [ -d "/docker-entrypoint-initdb.d" ]; then
+    for file in /docker-entrypoint-initdb.d/*; do
+      if [ "${file##*.}" = "sql" ]; then
+        echo "Executing PostgreSQL SQL file: $file"
+        su postgres -c "psql --username=postgres --file='$file'"
+      else
+        echo "Skipping non-SQL file for PostgreSQL: $file"
+      fi
+    done
   fi
 
   rm -rf ~/.psql_history ~/.ash_history $SQL
