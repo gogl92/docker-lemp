@@ -71,7 +71,7 @@ COPY \
     /etc/supervisor.d/
 
 # SQL files
-COPY ./sql-scripts/*.sql /docker-entrypoint-initdb.d/
+COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 
 # Entry point
 COPY docker-entrypoint.sh /docker-entrypoint.sh
