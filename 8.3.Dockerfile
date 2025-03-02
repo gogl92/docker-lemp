@@ -78,7 +78,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 # Ports
-EXPOSE 11300 11211 9300 9200 9000 6379 5432 3306 88 80 25 8080
+EXPOSE 11300 11211 9300 9200 9000 6379 5432 3306 88 80 25 8080 22
 
 # Commands
 ENTRYPOINT ["/docker-entrypoint.sh"]
