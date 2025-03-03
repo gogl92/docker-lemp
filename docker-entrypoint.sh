@@ -56,7 +56,7 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
   cat "$SQL" | mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE
 
   # Start MySQL server temporarily to import files
-  mysqld --user=mysql --daemonize
+  mysqld --user=mysql
 
   # Wait for MySQL to be ready
   while ! mysqladmin ping -h"localhost" --silent; do
@@ -77,7 +77,7 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
   fi
 
   # Stop MySQL after imports
-  mysqladmin -u root --password="$MYSQL_ROOT_PASSWORD" shutdown
+  #mysqladmin -u root --password="$MYSQL_ROOT_PASSWORD" shutdown
 
   rm -rf ~/.mysql_history ~/.ash_history $SQL
   touch /run/mysqld/.init
