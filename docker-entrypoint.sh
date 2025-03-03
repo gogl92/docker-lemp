@@ -60,7 +60,8 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
     for file in /docker-entrypoint-initdb.d/*; do
       if [ "${file##*.}" = "sql" ]; then
         echo "Executing MySQL SQL file: $file"
-        mysql --user=root --password="$MYSQL_ROOT_PASSWORD" < "$file"
+        #mysql --user=root --password="$MYSQL_ROOT_PASSWORD" < "$file"
+        mysql -u root --password="$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE < "$file"
       else
         echo "Skipping non-SQL file for MySQL: $file"
       fi
