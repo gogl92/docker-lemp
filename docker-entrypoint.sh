@@ -55,14 +55,6 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
 
   cat "$SQL" | mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE
 
-  # Start MySQL server temporarily to import files
-  mysqld --user=mysql
-
-  # Wait for MySQL to be ready
-  while ! mysqladmin ping -h"localhost" --silent; do
-    sleep 1
-  done
-
   # Run additional SQL scripts for MySQL
   if [ -d "/docker-entrypoint-initdb.d" ]; then
     for file in /docker-entrypoint-initdb.d/*; do
@@ -75,9 +67,6 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
       fi
     done
   fi
-
-  # Stop MySQL after imports
-  #mysqladmin -u root --password="$MYSQL_ROOT_PASSWORD" shutdown
 
   rm -rf ~/.mysql_history ~/.ash_history $SQL
   touch /run/mysqld/.init
