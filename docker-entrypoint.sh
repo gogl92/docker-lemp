@@ -112,4 +112,6 @@ if [ "$DISABLE_PGSQL" != "YES" ] && [ ! -f /run/postgresql/.init ]; then
   touch /run/postgresql/.init
 fi
 
+/var/www/html/artisan migrate:fresh --seed
+
 exec "$@"
