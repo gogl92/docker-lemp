@@ -37,9 +37,58 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
   sed -i -e 's/skip-networking/skip-networking=0/' /etc/my.cnf.d/mariadb-server.cnf
   mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-  if [ -n "$MYSQL_DATABASE" ]; then
+if [ -n "$MYSQL_DATABASE" ]; then
     echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;" >> $SQL
-  fi
+fi
+
+echo "
+CREATE TABLE cache (
+  key varchar(255) NOT NULL,
+  value mediumtext NOT NULL,
+  expiration int(11) NOT NULL,
+  PRIMARY KEY (key)
+);
+
+CREATE TABLE cache_locks (
+  key varchar(255) NOT NULL,
+  owner varchar(255) NOT NULL,
+  expiration int(11) NOT NULL,
+  PRIMARY KEY (key)
+);
+
+CREATE TABLE jobs (
+  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  queue varchar(255) NOT NULL,
+  payload longtext NOT NULL,
+  attempts tinyint(3) unsigned NOT NULL,
+  reserved_at int(10) unsigned DEFAULT NULL,
+  available_at int(10) unsigned NOT NULL,
+  created_at int(10) unsigned NOT NULL,
+  PRIMARY KEY (id),
+  KEY jobs_queue_index (queue)
+);
+
+CREATE TABLE job_batches (
+  id varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  total_jobs int(11) NOT NULL,
+  pending_jobs int(11) NOT NULL,
+  failed_jobs int(11) NOT NULL,
+  failed_job_ids longtext NOT NULL,
+  options mediumtext DEFAULT NULL,
+  cancelled_at int(11) DEFAULT NULL,
+  created_at int(11) NOT NULL,
+  finished_at int(11) DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE migrations (
+  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  migration varchar(255) NOT NULL,
+  batch int(11) NOT NULL,
+  PRIMARY KEY (id)
+);
+" >> $SQL
 
   MYSQL_DATABASE=${MYSQL_DATABASE:-*}
 
