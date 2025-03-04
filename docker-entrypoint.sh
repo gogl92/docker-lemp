@@ -53,6 +53,9 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
   echo "DELETE FROM mysql.user WHERE User = '' OR Password = '';" >> $SQL
   echo "FLUSH PRIVILEGES;" >> $SQL
 
+  # Append the SQL file to the SQL variable
+  cat /docker-entrypoint-initdb.d/init.sql >> $SQL
+
   cat "$SQL" | mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE
 
   # Run additional SQL scripts for MySQL
@@ -61,7 +64,7 @@ if [ "$DISABLE_MYSQL" != "YES" ] && [ ! -f "/run/mysqld/.init" ]; then
       if [ "${file##*.}" = "sql" ]; then
         echo "Executing MySQL SQL file: $file"
         #mysql --user=root --password="$MYSQL_ROOT_PASSWORD" < "$file"
-        mysql -u root --password="$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE < "$file"
+        #mysql -u root --password="$MYSQL_ROOT_PASSWORD" $MYSQL_DATABASE < "$file"
       else
         echo "Skipping non-SQL file for MySQL: $file"
       fi
@@ -111,7 +114,5 @@ if [ "$DISABLE_PGSQL" != "YES" ] && [ ! -f /run/postgresql/.init ]; then
   sed -i -E 's/host\s+all(.*)trust/host    all\1password/' /usr/local/pgsql/data/pg_hba.conf
   touch /run/postgresql/.init
 fi
-
-/var/www/html/artisan migrate:fresh --seed
 
 exec "$@"
