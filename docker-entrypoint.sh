@@ -41,6 +41,19 @@ if [ -n "$MYSQL_DATABASE" ]; then
     echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;" >> $SQL
 fi
 
+  MYSQL_DATABASE=${MYSQL_DATABASE:-*}
+
+  if [ -n "MYSQL_USER" ]; then
+    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
+    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'127.0.0.1' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
+    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'::1' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
+  fi
+
+  echo "ALTER user 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" >> $SQL
+  echo "DELETE FROM mysql.user WHERE User = '' OR Password = '';" >> $SQL
+  echo "FLUSH PRIVILEGES;" >> $SQL
+
+  # Adding Laravel base tables
 echo "
 CREATE TABLE cache (
   key varchar(255) NOT NULL,
@@ -89,21 +102,6 @@ CREATE TABLE migrations (
   PRIMARY KEY (id)
 );
 " >> $SQL
-
-  MYSQL_DATABASE=${MYSQL_DATABASE:-*}
-
-  if [ -n "MYSQL_USER" ]; then
-    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
-    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'127.0.0.1' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
-    echo "GRANT ALL ON $MYSQL_DATABASE.* to '$MYSQL_USER'@'::1' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $SQL
-  fi
-
-  echo "ALTER user 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';" >> $SQL
-  echo "DELETE FROM mysql.user WHERE User = '' OR Password = '';" >> $SQL
-  echo "FLUSH PRIVILEGES;" >> $SQL
-
-  # Append the SQL file to the SQL variable
-  cat /docker-entrypoint-initdb.d/init.sql >> $SQL
 
   cat "$SQL" | mysqld --user=mysql --bootstrap --silent-startup --skip-grant-tables=FALSE
 
